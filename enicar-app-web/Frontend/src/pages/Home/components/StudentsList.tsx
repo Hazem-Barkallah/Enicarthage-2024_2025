@@ -24,12 +24,12 @@ const StudentsList: React.FC<StudentsListProps> = ({filteredStudents}) => {
     <div className="self-center w-full border overflow-x-auto rounded-lg">
       <table className="bg-light rounded-lg w-full">
         <thead>
-          <tr className="bg-blue-400">
-            <td className="px-6 py-6 font-semibold text-center">
+          <tr className="bg-gradient-to-r from-blue-500 to-blue-600">
+            <td className="px-6 py-7 font-semibold text-center text-2xl text-white">
               Etudiant
             </td>
-            <td className="px-6 py-6 font-semibold text-center">Moyenne générale</td>
-            <td className="px-6 py-6 font-semibold text-center">Classe</td>
+            <td className="px-6 py-7 font-semibold text-center text-2xl text-white">Moyenne générale</td>
+            <td className="px-6 py-7 font-semibold text-center text-2xl text-white">Classe</td>
           </tr>
         </thead>
         <tbody>

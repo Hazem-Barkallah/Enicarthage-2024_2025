@@ -176,7 +176,7 @@ export default function GPAForm() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div className="bg-blue-400 px-8 py-6">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-3xl font-bold text-white">SEMESTRE {selectedSemester}</h1>

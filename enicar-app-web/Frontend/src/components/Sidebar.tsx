@@ -1,6 +1,6 @@
 import  { useState } from 'react';
 import { useNavigate,Link } from "react-router-dom";
-import { MessageSquare, Sigma, Users, Settings, LogOut } from 'lucide-react';
+import { Brain, Sigma, Users, Settings, LogOut } from 'lucide-react';
 import Logo from '../assets/Logo_Enicar.png';
 export default function Sidebar() {
     const [activeItem, setActiveItem] = useState('students');
@@ -23,10 +23,10 @@ export default function Sidebar() {
             path: '/home/gpa',
         },
         {
-            id: 'Contact',
-            label: 'Contact',
-            Icon: MessageSquare,
-            path: '/home/contact'
+            id: 'prediction',
+            label: 'Prediction de la Réussite',
+            Icon: Brain,
+            path: '/home/prediction'
         },
         {
             id: '',
@@ -38,7 +38,7 @@ export default function Sidebar() {
 
 
     return (
-        <div className="max-h-full max-w-80 m-1 bg-gradient-to-b from-blue-400 via-blue-300 to-blue-200 rounded-4xl flex flex-col">
+        <div className="max-h-full max-w-80 m-1 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-500 rounded-4xl flex flex-col">
             <div className="flex flex-col items-center pt-5 pb-16">
                 <img src={Logo} alt="Logo" className=" rounded-2xl w-3/4 mb-4 " />
                 <h1 className="text-2xl  text-center text-gray-800 tracking-wider">Ecole Nationale d'Ingénieurs de Carthage</h1>

@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { toast,ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Lock, GraduationCap, BookOpen } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, BookOpen } from 'lucide-react';
 
 interface FormData {
     email: string;
