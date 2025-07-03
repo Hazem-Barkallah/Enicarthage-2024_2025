@@ -107,9 +107,8 @@ export default function GradePredictionApp(): JSX.Element {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+        <div className="min-h-screen rounded-4xl border border-blue-500 m-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
             <div className="max-w-6xl mx-auto">
-                {/* Header */}
                 <div className="text-center mb-8 animate-fade-in">
                     <div className="flex items-center justify-center mb-4">
                         <Brain className="w-12 h-12 text-blue-600 mr-3" />
@@ -123,7 +122,6 @@ export default function GradePredictionApp(): JSX.Element {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Input Section */}
                     <div className="lg:col-span-2">
                         <div className="bg-white backdrop-blur-lg rounded-2xl border-2 border-blue-400 p-6 shadow-xl shadow-blue-100/50">
                             <h2 className="text-2xl font-semibold text-slate-800 mb-6 flex items-center">
@@ -172,7 +170,6 @@ export default function GradePredictionApp(): JSX.Element {
                         </div>
                     </div>
 
-                    {/* Results Section */}
                     <div className="lg:col-span-1">
                         <div className="bg-white backdrop-blur-lg rounded-2xl border-2 border-blue-400 p-6 shadow-xl shadow-blue-100/50 h-full">
                             <h2 className="text-2xl font-semibold text-slate-800 mb-6 flex items-center">
@@ -227,7 +224,6 @@ export default function GradePredictionApp(): JSX.Element {
                                         </div>
                                     </div>
 
-                                    {/* Insights */}
                                     <div className="space-y-3">
                                         <h3 className="text-slate-700 font-medium">Insights</h3>
                                         {prediction.insights.map((insight: string, index: number) => (
@@ -238,7 +234,6 @@ export default function GradePredictionApp(): JSX.Element {
                                         ))}
                                     </div>
 
-                                    {/* Action Button */}
                                     <button
                                         className="w-full px-4 py-3 bg-blue-50 text-blue-700 rounded-xl border border-blue-400 hover:bg-blue-200  transition-all duration-300"
                                         onClick={() => console.log('Detailed analysis clicked', prediction)}
@@ -251,28 +246,25 @@ export default function GradePredictionApp(): JSX.Element {
                     </div>
                 </div>
 
-                {/* Footer */}
-                <div className="text-center mt-8 text-slate-500 text-sm">
-                    <p>ML Model Integration Ready • Built with React & Tailwind CSS • TypeScript</p>
-                </div>
+                
             </div>
 
             <style>{`
         @keyframes fade-in {
-          from {
+        from {
             opacity: 0;
             transform: translateY(20px);
-          }
-          to {
+        }
+        to {
             opacity: 1;
             transform: translateY(0);
-          }
+        }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
+        animation: fade-in 0.6s ease-out;
         }
-      `}</style>
+    `}</style>
         </div>
     );
 }

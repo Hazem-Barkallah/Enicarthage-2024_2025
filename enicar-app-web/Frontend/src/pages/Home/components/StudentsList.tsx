@@ -1,5 +1,4 @@
 import React from "react";
-
 interface Student {
   _id: number;
   firstname: string;
@@ -11,7 +10,6 @@ interface Student {
 interface StudentsListProps {
   filteredStudents: Student[];
 }
-
 const StudentsList: React.FC<StudentsListProps> = ({filteredStudents}) => {
   if (!filteredStudents || filteredStudents.length === 0) {
     return (
@@ -30,11 +28,12 @@ const StudentsList: React.FC<StudentsListProps> = ({filteredStudents}) => {
             </td>
             <td className="px-6 py-7 font-semibold text-center text-2xl text-white">Moyenne générale</td>
             <td className="px-6 py-7 font-semibold text-center text-2xl text-white">Classe</td>
+            <td className="px-6 py-7 font-semibold text-center text-2xl text-white"></td>
           </tr>
         </thead>
         <tbody>
           {filteredStudents.map((student) => (
-            <tr key={student._id}>
+            <tr key={student._id} className="hover:bg-gray-300">
               <td className="py-7 text-blue-800 text-center font-semibold border-t ">
                 {student.firstname} {student.lastname}
               </td>
@@ -43,6 +42,13 @@ const StudentsList: React.FC<StudentsListProps> = ({filteredStudents}) => {
               </td>
               <td className="py-7 text-blue-800  text-center font-semibold border-t ">
                 {student.group}
+              </td>
+              <td className="py-7 text-blue-800  text-center font-semibold border-t ">
+                <div className="flex justify-center">
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Détails
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
