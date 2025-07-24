@@ -14,13 +14,14 @@ mongoose.connect(process.env.MONGO_URI)
 function importCSV() {
     const results = [];
 
-    fs.createReadStream('Schema_v1.csv')
+    fs.createReadStream('Info_1ere.csv')
         .pipe(csv())
         .on('data', (data) => results.push(data))
         .on('end', async () => {
             try {
                 await Student.deleteMany({});
                 await Student.insertMany(results);
+                console.log('First raw row from CSV:', results[0]);
                 console.log(`✅ Inserted ${results.length} students`);
                 mongoose.disconnect();
             } catch (error) {
