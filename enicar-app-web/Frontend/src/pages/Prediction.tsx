@@ -3,13 +3,18 @@ import { Brain, TrendingUp, Award, Calculator, type LucideIcon } from 'lucide-re
 
 interface Grades {
     math: string;
-    english: string;
-    science: string;
-    history: string;
-    physics: string;
-    chemistry: string;
-    biology: string;
-    literature: string;
+    analyse: string;
+    algo: string;
+    prog: string;
+    tic: string;
+    logique: string;
+    circuit: string;
+    semi: string;
+    gl: string;
+    ang: string;
+    fr: string;
+    eco: string;
+
 }
 
 interface PredictionResult {
@@ -28,13 +33,17 @@ interface Subject {
 export default function GradePredictionApp(): JSX.Element {
     const [grades, setGrades] = useState<Grades>({
         math: '',
-        english: '',
-        science: '',
-        history: '',
-        physics: '',
-        chemistry: '',
-        biology: '',
-        literature: ''
+        prog: '',
+        tic: '',
+        gl: '',
+        analyse: '',
+        algo: '',
+        circuit: '',
+        semi: '',
+        logique: '',
+        ang: '',
+        fr: '',
+        eco: ''
     });
 
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
@@ -50,7 +59,6 @@ export default function GradePredictionApp(): JSX.Element {
     const handlePredict = async (): Promise<void> => {
         setIsLoading(true);
 
-        // Simulate ML model prediction (replace with your actual ML model call)
         setTimeout(() => {
             const gradeValues: number[] = Object.values(grades)
                 .filter((g: string) => g !== '')
@@ -58,7 +66,6 @@ export default function GradePredictionApp(): JSX.Element {
 
             const average: number = gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) / gradeValues.length;
 
-            // Determine category based on average
             const getCategory = (avg: number): PredictionResult['category'] => {
                 if (avg >= 90) return 'Excellent';
                 if (avg >= 80) return 'Good';
@@ -66,7 +73,6 @@ export default function GradePredictionApp(): JSX.Element {
                 return 'Needs Improvement';
             };
 
-            // Mock prediction result
             const mockPrediction: PredictionResult = {
                 predictedGrade: Math.round((average + Math.random() * 10 - 5) * 100) / 100,
                 confidence: Math.round((85 + Math.random() * 10) * 100) / 100,
@@ -84,14 +90,18 @@ export default function GradePredictionApp(): JSX.Element {
     };
 
     const subjects: Subject[] = [
-        { key: 'math', label: 'Mathematics', icon: Calculator },
-        { key: 'english', label: 'English', icon: Brain },
-        { key: 'science', label: 'Science', icon: TrendingUp },
-        { key: 'history', label: 'History', icon: Award },
-        { key: 'physics', label: 'Physics', icon: Calculator },
-        { key: 'chemistry', label: 'Chemistry', icon: Brain },
-        { key: 'biology', label: 'Biology', icon: TrendingUp },
-        { key: 'literature', label: 'Literature', icon: Award }
+        { key: 'math', label: 'Maths Pour Ingénieur', icon: Calculator },
+        { key: 'analyse', label: 'Analyse Numérique', icon: Brain },
+        { key: 'algo', label: 'Algorithmique', icon: TrendingUp },
+        { key: 'prog', label: 'Programmation', icon: Award },
+        { key: 'tic', label: 'Technologies de l\'Information et de la Communication', icon: Calculator },
+        { key: 'circuit', label: 'Circuits Électroniques', icon: Brain },
+        { key: 'logique', label: 'Logique Formelle', icon: TrendingUp },
+        { key: 'semi', label: 'Semi-Conducteurs', icon: Award },
+        { key: 'gl', label: 'Génie Logiciel', icon: Calculator },
+        { key: 'ang', label: 'Anglais', icon: Brain },
+        { key: 'fr', label: 'Français', icon: TrendingUp },
+        { key: 'eco', label: 'Économie', icon: Award }
     ];
 
     const hasValidGrades: boolean = Object.values(grades).some((grade: string) => grade !== '' && !isNaN(Number(grade)));
@@ -139,11 +149,11 @@ export default function GradePredictionApp(): JSX.Element {
                                         <input
                                             type="number"
                                             min="0"
-                                            max="100"
-                                            step="0.1"
+                                            max="20"
+                                            step="0.25"
                                             value={grades[key]}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(key, e.target.value)}
-                                            placeholder="0-100"
+                                            placeholder="0-20"
                                             className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-200 rounded-xl text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300/30 transition-all duration-300 group-hover:border-blue-300"
                                         />
                                     </div>
