@@ -2,12 +2,16 @@ import Header from "./Header";
 import StudentsList from "./StudentsList";
 import  { useState, useEffect } from "react";
 
-interface Student {
-  _id: number;
+export interface Student {
+  _id: string;
+  studentNum: string;
   firstname: string;
   lastname: string;
   gpa: number;
+  level: string;
   group: string;
+  passed: string;
+  grades: Map<string, number>;
 }
 interface StudentsPageClientProps {
   students: Student[];

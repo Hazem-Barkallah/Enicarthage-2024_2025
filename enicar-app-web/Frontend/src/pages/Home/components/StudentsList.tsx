@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-interface Student {
-  _id: number;
+export interface Student {
+  _id: string;
+  studentNum: string;
   firstname: string;
   lastname: string;
-  group: string;
   gpa: number;
+  level: string;
+  group: string;
+  passed: string;
+  grades: Map<string, number>;
 }
 
 interface StudentsListProps {
@@ -28,7 +32,7 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
     window.scrollTo({
       top: 0,
     });
-    
+
     setTimeout(() => {
       setSelectedStudent(student);
       setIsModalOpen(true);
@@ -111,11 +115,10 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-3 py-2 rounded ${
-              currentPage === 1
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
-            }`}
+            className={`px-3 py-2 rounded ${currentPage === 1
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
           >
             Précédent
           </button>
@@ -124,24 +127,22 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
             <button
               key={page}
               onClick={() => goToPage(page)}
-              className={`px-3 py-2 rounded ${
-                currentPage === page
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+              className={`px-3 py-2 rounded ${currentPage === page
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
             >
               {page}
             </button>
           ))}
-          
+
           <button
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-2 rounded ${
-              currentPage === totalPages
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
-            }`}
+            className={`px-3 py-2 rounded ${currentPage === totalPages
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
           >
             Suivant
           </button>
@@ -152,11 +153,11 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
         Page {currentPage} sur {totalPages}
       </div>
       {isModalOpen && selectedStudent && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 flex justify-center z-50"
           onClick={closeModal}
         >
-          <div 
+          <div
             className="bg-white rounded-lg p-6 mt-5 max-w-md w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -171,7 +172,7 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
                 ×
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -179,28 +180,35 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
                 </label>
                 <p className="text-lg text-gray-900">{selectedStudent._id}</p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Prénom
                 </label>
                 <p className="text-lg text-gray-900">{selectedStudent.firstname}</p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Nom
                 </label>
                 <p className="text-lg text-gray-900">{selectedStudent.lastname}</p>
               </div>
-              
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Niveau
+                </label>
+                <p className="text-lg text-gray-900">{selectedStudent.level}</p>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Classe
                 </label>
                 <p className="text-lg text-gray-900">{selectedStudent.group}</p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Moyenne générale
@@ -209,8 +217,28 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
                   {selectedStudent.gpa}
                 </p>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Statut
+                </label>
+                <p className="text-lg text-gray-900">
+                  {selectedStudent.passed=="A" ? 'Admis(e)' : 'Non admis(e)'}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <ul>
+                  {Object.entries(selectedStudent.grades).map(([subject, grade]) => (
+                    <li key={subject}>
+                      {subject}: {grade}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            
             <div className="mt-6 flex justify-end space-x-3">
               <button
                 onClick={closeModal}
