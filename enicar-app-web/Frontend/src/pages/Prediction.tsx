@@ -20,7 +20,7 @@ interface Grades {
 interface PredictionResult {
     predictedGrade: number;
     confidence: number;
-    category: 'Excellent' | 'Good' | 'Average' | 'Needs Improvement';
+    category: 'Excellent' | 'Bon' | 'Moyen' | 'Besoin d\'Amélioration';
     insights: string[];
 }
 
@@ -68,9 +68,9 @@ export default function GradePredictionApp(): JSX.Element {
 
             const getCategory = (avg: number): PredictionResult['category'] => {
                 if (avg >= 90) return 'Excellent';
-                if (avg >= 80) return 'Good';
-                if (avg >= 70) return 'Average';
-                return 'Needs Improvement';
+                if (avg >= 80) return 'Bon';
+                if (avg >= 70) return 'Moyen';
+                return 'Besoin d\'Amélioration';
             };
 
             const mockPrediction: PredictionResult = {
@@ -78,9 +78,9 @@ export default function GradePredictionApp(): JSX.Element {
                 confidence: Math.round((85 + Math.random() * 10) * 100) / 100,
                 category: getCategory(average),
                 insights: [
-                    `Based on ${gradeValues.length} subjects`,
-                    `Average input: ${Math.round(average * 100) / 100}`,
-                    `Trend: ${average > 75 ? 'Positive' : 'Stable'}`
+                    `Basé sur ${gradeValues.length > 1 ?  gradeValues.length + ' matières' : gradeValues.length + 'matière'} `,
+                    `Moyenne des entrées: ${Math.round(average * 100) / 100}`,
+                    `Tendance: ${average > 75 ? 'Positive' : 'Stable'}`
                 ]
             };
 
@@ -109,9 +109,9 @@ export default function GradePredictionApp(): JSX.Element {
     const getCategoryColor = (category: PredictionResult['category']): string => {
         switch (category) {
             case 'Excellent': return 'text-green-600';
-            case 'Good': return 'text-blue-600';
-            case 'Average': return 'text-yellow-600';
-            case 'Needs Improvement': return 'text-red-600';
+            case 'Bon': return 'text-blue-600';
+            case 'Moyen': return 'text-yellow-600';
+            case 'Besoin d\'Amélioration': return 'text-red-600';
             default: return 'text-blue-600';
         }
     };
@@ -123,11 +123,11 @@ export default function GradePredictionApp(): JSX.Element {
                     <div className="flex items-center justify-center mb-4">
                         <Brain className="w-12 h-12 text-blue-600 mr-3" />
                         <h1 className="text-4xl md:text-5xl font-light text-slate-800">
-                            Grade Prediction Dashboard
+                            Dashboard de Prédiction de réussite
                         </h1>
                     </div>
                     <p className="text-slate-600 text-lg">
-                        Enter your subject grades to predict your overall performance
+                        Entrer vos moyennes de matières du 1er semestre pour prédire votre performance globale
                     </p>
                 </div>
 
@@ -136,7 +136,7 @@ export default function GradePredictionApp(): JSX.Element {
                         <div className="bg-white backdrop-blur-lg rounded-2xl border-2 border-blue-400 p-6 shadow-xl shadow-blue-100/50">
                             <h2 className="text-2xl font-semibold text-slate-800 mb-6 flex items-center">
                                 <Calculator className="w-6 h-6 mr-2 text-blue-600" />
-                                Subject Grades
+                                Moyennes de Matières
                             </h2>
 
                             <div className="grid md:grid-cols-2 gap-4">
@@ -168,12 +168,12 @@ export default function GradePredictionApp(): JSX.Element {
                                 {isLoading ? (
                                     <>
                                         <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                                        Analyzing...
+                                        Analyse...
                                     </>
                                 ) : (
                                     <>
                                         <Brain className="w-5 h-5 mr-2" />
-                                        Predict Grade
+                                        Prédire les Notes
                                     </>
                                 )}
                             </button>
@@ -184,14 +184,14 @@ export default function GradePredictionApp(): JSX.Element {
                         <div className="bg-white backdrop-blur-lg rounded-2xl border-2 border-blue-400 p-6 shadow-xl shadow-blue-100/50 h-full">
                             <h2 className="text-2xl font-semibold text-slate-800 mb-6 flex items-center">
                                 <TrendingUp className="w-6 h-6 mr-2 text-blue-600" />
-                                Prediction Results
+                                Résultats de Prédiction
                             </h2>
 
                             {!prediction && !isLoading && (
                                 <div className="text-center py-12">
                                     <Award className="w-16 h-16 text-blue-400 mx-auto mb-4" />
                                     <p className="text-slate-500 text-lg">
-                                        Enter grades and click predict to see results
+                                        Entrer vos notes et cliquer sur prédire pour voir les résultats
                                     </p>
                                 </div>
                             )}
@@ -200,7 +200,7 @@ export default function GradePredictionApp(): JSX.Element {
                                 <div className="text-center py-12">
                                     <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-400 border-t-transparent mx-auto mb-4"></div>
                                     <p className="text-slate-600 text-lg animate-pulse">
-                                        Processing your grades...
+                                        Traitement de vos notes...
                                     </p>
                                 </div>
                             )}
@@ -221,7 +221,7 @@ export default function GradePredictionApp(): JSX.Element {
 
                                     <div className="bg-blue-50 rounded-xl p-4 border border-blue-400">
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-slate-700">Confidence</span>
+                                            <span className="text-slate-700">Confiance</span>
                                             <span className="text-green-600 font-semibold">
                                                 {prediction.confidence}%
                                             </span>
@@ -235,7 +235,7 @@ export default function GradePredictionApp(): JSX.Element {
                                     </div>
 
                                     <div className="space-y-3">
-                                        <h3 className="text-slate-700 font-medium">Insights</h3>
+                                        <h3 className="text-slate-700 font-medium">Aperçus</h3>
                                         {prediction.insights.map((insight: string, index: number) => (
                                             <div key={index} className="flex items-center text-slate-600 text-sm">
                                                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
@@ -248,7 +248,7 @@ export default function GradePredictionApp(): JSX.Element {
                                         className="w-full px-4 py-3 bg-blue-50 text-blue-700 rounded-xl border border-blue-400 hover:bg-blue-200  transition-all duration-300"
                                         onClick={() => console.log('Detailed analysis clicked', prediction)}
                                     >
-                                        View Detailed Analysis
+                                        Voir l'analyse détaillée
                                     </button>
                                 </div>
                             )}

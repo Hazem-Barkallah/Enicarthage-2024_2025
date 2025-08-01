@@ -12,5 +12,7 @@ mongoose.connect(process.env.MONGO_URI)
         console.error('Database connection error:', error);
     });
 const studentsRouter = require('./routes/Students');
+const predictRouter = require('./routes/predict');
 app.use(express.json());
 app.use('/api/students',studentsRouter);
+app.use('/api', predictRouter);

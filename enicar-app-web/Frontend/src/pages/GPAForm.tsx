@@ -147,10 +147,10 @@ export default function GPAForm() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+        <div className="min-h-screen w-full rounded-4xl border border-blue-500 m-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
             <div className="mb-6">
                 <div className="relative inline-block">
-                    <label htmlFor="semester-select" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="semester-select" className="block text-sm font-medium text-gray-700 m-5">
                         Choisir le semestre:
                     </label>
                     <div className="relative">

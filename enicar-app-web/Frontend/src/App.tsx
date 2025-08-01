@@ -4,6 +4,7 @@ import Home from './pages/Home/Page';
 import Login from './pages/Login';
 import Contact from './pages/Prediction';
 import GPAForm from './pages/GPAForm';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/home/prediction" element={<Contact />} />
           <Route path="/home/gpa" element={<GPAForm />} />
-          <Route path="/home/profile" element={<div>Mon Profil</div>} />
+          <Route path="/home/profile" element={<Profile />} />
         </Route>
         <Route path="/" element={<Login />} />
       </Routes>

@@ -40,12 +40,12 @@ export default function StudentsPage({ students }: StudentsPageClientProps) {
   };
 
   return (
-    <main className=" mx-14 w-full flex flex-col my-4 drop-shadow-xl">
+    <div className="min-h-screen w-full rounded-4xl border border-blue-500 m-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
       <Header selectedRole={selectedRole} onRoleChange={handleRoleChange} />
       <div className="pb-5 font-bold text-gray-700 font-mono text-lg">
       <p>Nombre des étudiants: {filteredStudents.length}</p>
     </div>
       <StudentsList filteredStudents={filteredStudents} />
-    </main>
+    </div>
   );
 }
