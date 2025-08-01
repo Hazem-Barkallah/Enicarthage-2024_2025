@@ -1,20 +1,20 @@
-import React, { useEffect, useState, type JSX } from 'react';
+import React, { useState, type JSX } from 'react';
 import { Brain, TrendingUp, Award, Calculator, type LucideIcon } from 'lucide-react';
 import { getPredictions } from '../actions/Prediction';
 
 interface Grades {
-    math: string;
-    analyse: string;
-    algo: string;
-    prog: string;
-    tic: string;
-    logique: string;
-    circuit: string;
-    semi: string;
-    gl: string;
-    ang: string;
-    fr: string;
-    eco: string;
+    moy_math_ing: string
+    moy_analyse_s1: string
+    moy_algo: string
+    moy_prog: string
+    moy_TIC: string
+    moy_logique: string
+    moy_GL: string
+    moy_circuit: string
+    moy_semi: string
+    moy_eco_s1: string
+    moy_ang_s1: string
+    moy_fr_s1: string
 
 }
 
@@ -23,7 +23,7 @@ interface PredictionResult {
     probability: number;
 }
 
-interface PredictionDisplay{
+interface PredictionDisplay {
     prediction: PredictionResult;
     category: string;
     insights: string[];
@@ -36,18 +36,18 @@ interface Subject {
 
 export default function GradePredictionApp(): JSX.Element {
     const [grades, setGrades] = useState<Grades>({
-        math: '',
-        prog: '',
-        tic: '',
-        gl: '',
-        analyse: '',
-        algo: '',
-        circuit: '',
-        semi: '',
-        logique: '',
-        ang: '',
-        fr: '',
-        eco: ''
+        moy_math_ing: '',
+        moy_analyse_s1: '',
+        moy_algo: '',
+        moy_prog: '',
+        moy_TIC: '',
+        moy_logique: '',
+        moy_GL: '',
+        moy_circuit: '',
+        moy_semi: '',
+        moy_ang_s1: '',
+        moy_fr_s1: '',
+        moy_eco_s1: ''
     });
 
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
@@ -63,13 +63,17 @@ export default function GradePredictionApp(): JSX.Element {
 
     const handlePredict = async (): Promise<void> => {
         setIsLoading(true);
+        try {
+            const gradeValues: Record<string, number> = {};
+            for (const key in grades) {
+                const value = grades[key as keyof Grades];
+                (value == '')? gradeValues[key] = 0 : gradeValues[key]=Number(value);
+            }
 
-        setTimeout(() => {
-            const gradeValues: number[] = Object.values(grades)
-                .filter((g: string) => g !== '')
-                .map((g: string) => Number(g));
+            const predictionResponse = await getPredictions(gradeValues);
+            console.log("API response:", predictionResponse);
+            setPrediction(predictionResponse);
 
-                
             const getCategory = (avg: number): string => {
                 if (avg >= 90) return 'Excellent';
                 if (avg >= 80) return 'Bon';
@@ -77,42 +81,47 @@ export default function GradePredictionApp(): JSX.Element {
                 return 'Besoin d\'Amélioration';
             };
 
-            const mockPrediction: PredictionDisplay = {
+            const displayData: PredictionDisplay = {
                 prediction: {
-                    success: prediction!.success,
-                    probability: prediction!.probability * 100
+                    success: predictionResponse.success,
+                    probability: predictionResponse.probability * 100
                 },
-                category: getCategory(prediction!.probability * 100),
+                category: getCategory(predictionResponse.probability * 100),
                 insights: [
-                    `Basé sur ${gradeValues.length > 1 ?  gradeValues.length + ' matières' : gradeValues.length + 'matière'} `,
-                    `Moyenne des entrées: ${Math.round(prediction!.probability * 100 * 100) / 100}`,
-                    `Tendance: ${prediction!.probability * 100 > 75 ? 'Positive' : 'Stable'}`
+                    `Basé sur ${Object.keys(gradeValues).length} matières`,
+                    `Moyenne des entrées: ${Math.round(predictionResponse.probability * 100 * 100) / 100}`,
+                    `Tendance: ${predictionResponse.probability * 100 > 75 ? 'Positive' : 'Stable'}`
                 ]
             };
 
-            setPredictionDisplay(mockPrediction);
+            setPredictionDisplay(displayData);
+        } catch (error) {
+            console.error("Prediction error:", error);
+        }
+        finally {
             setIsLoading(false);
-        }, 2000);
-    };
+        }
+    }
+
 
     const subjects: Subject[] = [
-        { key: 'math', label: 'Maths Pour Ingénieur', icon: Calculator },
-        { key: 'analyse', label: 'Analyse Numérique', icon: Brain },
-        { key: 'algo', label: 'Algorithmique', icon: TrendingUp },
-        { key: 'prog', label: 'Programmation', icon: Award },
-        { key: 'tic', label: 'Technologies de l\'Information et de la Communication', icon: Calculator },
-        { key: 'circuit', label: 'Circuits Électroniques', icon: Brain },
-        { key: 'logique', label: 'Logique Formelle', icon: TrendingUp },
-        { key: 'semi', label: 'Semi-Conducteurs', icon: Award },
-        { key: 'gl', label: 'Génie Logiciel', icon: Calculator },
-        { key: 'ang', label: 'Anglais', icon: Brain },
-        { key: 'fr', label: 'Français', icon: TrendingUp },
-        { key: 'eco', label: 'Économie', icon: Award }
+        { key: 'moy_math_ing', label: 'Maths Pour Ingénieur', icon: Calculator },
+        { key: 'moy_analyse_s1', label: 'Analyse Numérique', icon: Brain },
+        { key: 'moy_algo', label: 'Algorithmique', icon: TrendingUp },
+        { key: 'moy_prog', label: 'Programmation', icon: Award },
+        { key: 'moy_TIC', label: 'Technologies de l\'Information et de la Communication', icon: Calculator },
+        { key: 'moy_circuit', label: 'Circuits Électroniques', icon: Brain },
+        { key: 'moy_logique', label: 'Logique Formelle', icon: TrendingUp },
+        { key: 'moy_semi', label: 'Semi-Conducteurs', icon: Award },
+        { key: 'moy_GL', label: 'Génie Logiciel', icon: Calculator },
+        { key: 'moy_ang_s1', label: 'Anglais', icon: Brain },
+        { key: 'moy_fr_s1', label: 'Français', icon: TrendingUp },
+        { key: 'moy_eco_s1', label: 'Économie', icon: Award }
     ];
 
     const hasValidGrades: boolean = Object.values(grades).some((grade: string) => grade !== '' && !isNaN(Number(grade)));
 
-    const getCategoryColor = (category:string): string => {
+    const getCategoryColor = (category: string): string => {
         switch (category) {
             case 'Excellent': return 'text-green-600';
             case 'Bon': return 'text-blue-600';
@@ -121,15 +130,6 @@ export default function GradePredictionApp(): JSX.Element {
             default: return 'text-blue-600';
         }
     };
-
-    useEffect(() => {
-        const fetchPrediction = async () => {
-            const prediction = await getPredictions();
-            setPrediction(prediction);
-        };
-
-        fetchPrediction();
-    }, []);
 
     return (
         <div className="min-h-screen rounded-4xl border border-blue-500 m-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
@@ -188,7 +188,7 @@ export default function GradePredictionApp(): JSX.Element {
                                 ) : (
                                     <>
                                         <Brain className="w-5 h-5 mr-2" />
-                                        Prédire les Notes
+                                        Prédire la réussite
                                     </>
                                 )}
                             </button>
@@ -271,7 +271,7 @@ export default function GradePredictionApp(): JSX.Element {
                     </div>
                 </div>
 
-                
+
             </div>
 
             <style>{`

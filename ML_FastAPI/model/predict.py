@@ -11,6 +11,6 @@ def predict(input_features: StudentInput) -> dict:
     probability = model.predict_proba(features_array)[0][0]
 
     return {
-        "prediction": "Success" if prediction == 'A' else "No success",
+        "success": "Success" if prediction == 'A' else "No success",
         "probability": round(probability, 3),
     }
