@@ -1,5 +1,5 @@
 import React, { useState, type JSX } from 'react';
-import { Brain, TrendingUp, Award, Calculator, type LucideIcon } from 'lucide-react';
+import { Brain, TrendingUp, Award, Calculator, ComputerIcon,Languages,Pencil,HandCoins,Radical,Pi,Cpu,CircuitBoard,Router,BrainCircuit, type LucideIcon } from 'lucide-react';
 import { getPredictions } from '../actions/Prediction';
 
 interface Grades {
@@ -19,7 +19,7 @@ interface Grades {
 }
 
 interface PredictionResult {
-    success: number;
+    success: string;
     probability: number;
 }
 
@@ -67,12 +67,13 @@ export default function GradePredictionApp(): JSX.Element {
             const gradeValues: Record<string, number> = {};
             for (const key in grades) {
                 const value = grades[key as keyof Grades];
-                (value == '')? gradeValues[key] = 0 : gradeValues[key]=Number(value);
+                (value == '') ? gradeValues[key] = 0 : gradeValues[key] = Number(value);
             }
 
             const predictionResponse = await getPredictions(gradeValues);
             console.log("API response:", predictionResponse);
-            setPrediction(predictionResponse);
+            setPrediction(predictionResponse.prediction);
+            console.log("Prediction result:", prediction);
 
             const getCategory = (avg: number): string => {
                 if (avg >= 90) return 'Excellent';
@@ -83,40 +84,40 @@ export default function GradePredictionApp(): JSX.Element {
 
             const displayData: PredictionDisplay = {
                 prediction: {
-                    success: predictionResponse.success,
-                    probability: predictionResponse.probability * 100
+                    success: predictionResponse.prediction.success,
+                    probability: predictionResponse.prediction.probability * 100
                 },
-                category: getCategory(predictionResponse.probability * 100),
+                category: getCategory(predictionResponse.prediction.probability * 100),
                 insights: [
                     `Basé sur ${Object.keys(gradeValues).length} matières`,
-                    `Moyenne des entrées: ${Math.round(predictionResponse.probability * 100 * 100) / 100}`,
-                    `Tendance: ${predictionResponse.probability * 100 > 75 ? 'Positive' : 'Stable'}`
+                    `Moyenne des entrées: ${Math.round(predictionResponse.prediction.probability * 100 * 100) / 100}`,
+                    `Tendance: ${predictionResponse.prediction.probability * 100 > 75 ? 'Positive' : 'Stable'}`
                 ]
             };
-
+            
             setPredictionDisplay(displayData);
         } catch (error) {
             console.error("Prediction error:", error);
         }
-        finally {
-            setIsLoading(false);
+        finally{
+            setTimeout(() => setIsLoading(false), 3000);
         }
-    }
+    };
 
 
     const subjects: Subject[] = [
-        { key: 'moy_math_ing', label: 'Maths Pour Ingénieur', icon: Calculator },
-        { key: 'moy_analyse_s1', label: 'Analyse Numérique', icon: Brain },
-        { key: 'moy_algo', label: 'Algorithmique', icon: TrendingUp },
-        { key: 'moy_prog', label: 'Programmation', icon: Award },
-        { key: 'moy_TIC', label: 'Technologies de l\'Information et de la Communication', icon: Calculator },
-        { key: 'moy_circuit', label: 'Circuits Électroniques', icon: Brain },
-        { key: 'moy_logique', label: 'Logique Formelle', icon: TrendingUp },
-        { key: 'moy_semi', label: 'Semi-Conducteurs', icon: Award },
-        { key: 'moy_GL', label: 'Génie Logiciel', icon: Calculator },
-        { key: 'moy_ang_s1', label: 'Anglais', icon: Brain },
-        { key: 'moy_fr_s1', label: 'Français', icon: TrendingUp },
-        { key: 'moy_eco_s1', label: 'Économie', icon: Award }
+        { key: 'moy_math_ing', label: 'Maths Pour Ingénieur', icon: Radical },
+        { key: 'moy_analyse_s1', label: 'Analyse Numérique', icon: Pi },
+        { key: 'moy_algo', label: 'Algorithmique', icon: BrainCircuit },
+        { key: 'moy_prog', label: 'Programmation', icon: ComputerIcon },
+        { key: 'moy_TIC', label: 'Technologies de l\'Information et de la Communication', icon: Router },
+        { key: 'moy_circuit', label: 'Circuits Électroniques', icon: CircuitBoard },
+        { key: 'moy_logique', label: 'Logique Formelle', icon: Brain },
+        { key: 'moy_semi', label: 'Semi-Conducteurs', icon: Cpu },
+        { key: 'moy_GL', label: 'Génie Logiciel', icon: Pencil },
+        { key: 'moy_ang_s1', label: 'Anglais', icon: Languages },
+        { key: 'moy_fr_s1', label: 'Français', icon: Languages },
+        { key: 'moy_eco_s1', label: 'Économie', icon: HandCoins }
     ];
 
     const hasValidGrades: boolean = Object.values(grades).some((grade: string) => grade !== '' && !isNaN(Number(grade)));
@@ -226,7 +227,7 @@ export default function GradePredictionApp(): JSX.Element {
                                     <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl p-6 border-2 border-blue-400">
                                         <div className="text-center">
                                             <div className="text-4xl font-bold text-blue-600 mb-2">
-                                                {predictionDisplay!.prediction.probability}%
+                                                {prediction.success === 'Success' ? 'Succès' : 'Échec'}
                                             </div>
                                             <div className={`text-lg font-medium ${getCategoryColor(predictionDisplay!.category)}`}>
                                                 {predictionDisplay!.category}
@@ -236,9 +237,10 @@ export default function GradePredictionApp(): JSX.Element {
 
                                     <div className="bg-blue-50 rounded-xl p-4 border border-blue-400">
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-slate-700">Confiance</span>
+                                            {/* <span className="text-slate-700">Confiance</span> */}
+                                            <span className="text-slate-700">Probabilité</span>
                                             <span className="text-green-600 font-semibold">
-                                                {predictionDisplay!.prediction.probability}%
+                                                {Math.round(predictionDisplay!.prediction.probability * 100) / 100}%
                                             </span>
                                         </div>
                                         <div className="w-full bg-blue-200 rounded-full h-2">

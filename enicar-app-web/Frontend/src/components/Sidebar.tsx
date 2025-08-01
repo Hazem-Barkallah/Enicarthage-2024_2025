@@ -1,6 +1,6 @@
 import  { useState } from 'react';
 import { useNavigate,Link } from "react-router-dom";
-import { Brain, Sigma, Users, Settings, LogOut } from 'lucide-react';
+import { ComputerIcon, Sigma, Users, Settings, LogOut } from 'lucide-react';
 import Logo from '../assets/Logo_Enicar.png';
 export default function Sidebar() {
     const [activeItem, setActiveItem] = useState('students');
@@ -24,8 +24,8 @@ export default function Sidebar() {
         },
         {
             id: 'prediction',
-            label: 'Prediction de la Réussite',
-            Icon: Brain,
+            label: 'Machine Learning Model',
+            Icon: ComputerIcon,
             path: '/home/prediction'
         },
         {
