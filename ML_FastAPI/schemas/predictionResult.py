@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class PredictionResult(BaseModel):
-    prediction: str
+    success: str
     probability: float

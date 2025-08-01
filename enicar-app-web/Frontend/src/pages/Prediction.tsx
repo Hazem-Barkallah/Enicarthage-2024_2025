@@ -1,5 +1,6 @@
-import React, { useState, type JSX } from 'react';
+import React, { useEffect, useState, type JSX } from 'react';
 import { Brain, TrendingUp, Award, Calculator, type LucideIcon } from 'lucide-react';
+import { getPredictions } from '../actions/Prediction';
 
 interface Grades {
     math: string;
@@ -18,12 +19,15 @@ interface Grades {
 }
 
 interface PredictionResult {
-    predictedGrade: number;
-    confidence: number;
-    category: 'Excellent' | 'Bon' | 'Moyen' | 'Besoin d\'Amélioration';
-    insights: string[];
+    success: number;
+    probability: number;
 }
 
+interface PredictionDisplay{
+    prediction: PredictionResult;
+    category: string;
+    insights: string[];
+}
 interface Subject {
     key: keyof Grades;
     label: string;
@@ -47,6 +51,7 @@ export default function GradePredictionApp(): JSX.Element {
     });
 
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+    const [predictionDisplay, setPredictionDisplay] = useState<PredictionDisplay | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleInputChange = (subject: keyof Grades, value: string): void => {
@@ -64,27 +69,28 @@ export default function GradePredictionApp(): JSX.Element {
                 .filter((g: string) => g !== '')
                 .map((g: string) => Number(g));
 
-            const average: number = gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) / gradeValues.length;
-
-            const getCategory = (avg: number): PredictionResult['category'] => {
+                
+            const getCategory = (avg: number): string => {
                 if (avg >= 90) return 'Excellent';
                 if (avg >= 80) return 'Bon';
                 if (avg >= 70) return 'Moyen';
                 return 'Besoin d\'Amélioration';
             };
 
-            const mockPrediction: PredictionResult = {
-                predictedGrade: Math.round((average + Math.random() * 10 - 5) * 100) / 100,
-                confidence: Math.round((85 + Math.random() * 10) * 100) / 100,
-                category: getCategory(average),
+            const mockPrediction: PredictionDisplay = {
+                prediction: {
+                    success: prediction!.success,
+                    probability: prediction!.probability * 100
+                },
+                category: getCategory(prediction!.probability * 100),
                 insights: [
                     `Basé sur ${gradeValues.length > 1 ?  gradeValues.length + ' matières' : gradeValues.length + 'matière'} `,
-                    `Moyenne des entrées: ${Math.round(average * 100) / 100}`,
-                    `Tendance: ${average > 75 ? 'Positive' : 'Stable'}`
+                    `Moyenne des entrées: ${Math.round(prediction!.probability * 100 * 100) / 100}`,
+                    `Tendance: ${prediction!.probability * 100 > 75 ? 'Positive' : 'Stable'}`
                 ]
             };
 
-            setPrediction(mockPrediction);
+            setPredictionDisplay(mockPrediction);
             setIsLoading(false);
         }, 2000);
     };
@@ -106,7 +112,7 @@ export default function GradePredictionApp(): JSX.Element {
 
     const hasValidGrades: boolean = Object.values(grades).some((grade: string) => grade !== '' && !isNaN(Number(grade)));
 
-    const getCategoryColor = (category: PredictionResult['category']): string => {
+    const getCategoryColor = (category:string): string => {
         switch (category) {
             case 'Excellent': return 'text-green-600';
             case 'Bon': return 'text-blue-600';
@@ -115,6 +121,15 @@ export default function GradePredictionApp(): JSX.Element {
             default: return 'text-blue-600';
         }
     };
+
+    useEffect(() => {
+        const fetchPrediction = async () => {
+            const prediction = await getPredictions();
+            setPrediction(prediction);
+        };
+
+        fetchPrediction();
+    }, []);
 
     return (
         <div className="min-h-screen rounded-4xl border border-blue-500 m-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
@@ -211,10 +226,10 @@ export default function GradePredictionApp(): JSX.Element {
                                     <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl p-6 border-2 border-blue-400">
                                         <div className="text-center">
                                             <div className="text-4xl font-bold text-blue-600 mb-2">
-                                                {prediction.predictedGrade}%
+                                                {predictionDisplay!.prediction.probability}%
                                             </div>
-                                            <div className={`text-lg font-medium ${getCategoryColor(prediction.category)}`}>
-                                                {prediction.category}
+                                            <div className={`text-lg font-medium ${getCategoryColor(predictionDisplay!.category)}`}>
+                                                {predictionDisplay!.category}
                                             </div>
                                         </div>
                                     </div>
@@ -223,20 +238,20 @@ export default function GradePredictionApp(): JSX.Element {
                                         <div className="flex justify-between items-center mb-2">
                                             <span className="text-slate-700">Confiance</span>
                                             <span className="text-green-600 font-semibold">
-                                                {prediction.confidence}%
+                                                {predictionDisplay!.prediction.probability}%
                                             </span>
                                         </div>
                                         <div className="w-full bg-blue-200 rounded-full h-2">
                                             <div
                                                 className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-1000"
-                                                style={{ width: `${prediction.confidence}%` }}
+                                                style={{ width: `${predictionDisplay!.prediction.probability}%` }}
                                             ></div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-3">
                                         <h3 className="text-slate-700 font-medium">Aperçus</h3>
-                                        {prediction.insights.map((insight: string, index: number) => (
+                                        {predictionDisplay!.insights.map((insight: string, index: number) => (
                                             <div key={index} className="flex items-center text-slate-600 text-sm">
                                                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                                                 {insight}
