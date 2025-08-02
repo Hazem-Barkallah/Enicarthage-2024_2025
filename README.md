@@ -22,8 +22,8 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ENICarthage-Student-Success-Predictor.git
-   cd ENICarthage-Student-Success-Predictor
+   git clone https://github.com/Hazem-Barkallah/Enicarthage-2024_2025.git
+   cd enicar-app-web
 
 2. Install Frontend
    ```bash
