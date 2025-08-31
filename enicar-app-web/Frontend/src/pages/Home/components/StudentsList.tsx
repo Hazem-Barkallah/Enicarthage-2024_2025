@@ -176,13 +176,6 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  ID
-                </label>
-                <p className="text-lg text-gray-900">{selectedStudent._id}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Prénom
                 </label>
                 <p className="text-lg text-gray-900">{selectedStudent.firstname}</p>
@@ -223,7 +216,7 @@ const StudentsList: React.FC<StudentsListProps> = ({ filteredStudents }) => {
                   Statut
                 </label>
                 <p className="text-lg text-gray-900">
-                  {selectedStudent.passed=="A" ? 'Admis(e)' : 'Non admis(e)'}
+                  {selectedStudent.passed=="A" ? 'Admis(e)' : 'Controle'}
                 </p>
               </div>
               <div>
